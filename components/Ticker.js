@@ -3,25 +3,27 @@ import { TickersContext } from '../contexts/TickersContext';
 
 export default function Ticker(props){
     var ticker, prevTicker;
-    if(props.symbol === "BTCUSD"){
+    console.log(props.symbol)
+    if(props.symbol === "BTCETH"){
         const { ticker1, prevTicker1 } = useContext(TickersContext);
         ticker = ticker1;
         prevTicker = prevTicker1;
-    }else if(props.symbol === "BTCBRL"){
+        console.log('1');
+    }else if(props.symbol === "ETHBTC"){
         const { ticker2, prevTicker2 } = useContext(TickersContext);
         ticker = ticker2;
         prevTicker = prevTicker2;
-    }else if(props.symbol === "ETHUSD"){
-        const { ticker3, prevTicker3 } = useContext(TickersContext);
-        ticker = ticker3;
-        prevTicker = prevTicker3;
-    }else if(props.symbol === "ETHBRL"){
-        const { ticker4, prevTicker4 } = useContext(TickersContext);
-        ticker = ticker4;
-        prevTicker = prevTicker4;
+        console.log('2');
     }
 
-    return <div>
-        <p>test</p>
-    </div>
+    if(props.firstMessage){
+        return <div className="ticker">
+                <p style={{color : "white", textAlign : "center"}}>{props.symbol}</p>
+                <p>Price: {ticker.p}</p>
+                <p>Quantity: {ticker.q}</p>
+                <p>Is buyer a market maker? {(ticker.m) ? "Yes" : "No"}</p>
+            </div>
+    }else{
+        return <div/>
+    }
 }

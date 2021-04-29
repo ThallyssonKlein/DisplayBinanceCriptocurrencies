@@ -1,42 +1,41 @@
+import { useContext, useState } from 'react';
 import { WebSocket } from 'nextjs-websocket'
 import Grid from '@material-ui/core/Grid';
-import TickersContextProvider from '../contexts/TickersContext';
 import Ticker from '../components/Ticker';
+import { TickersContext } from '../contexts/TickersContext';
 
 export default function Home(){
-    const handleData = data => {
-        setTicker(data);
-    }
-    
-    // {
-    //     "e": "aggTrade",  // Event type
-    //     "E": 123456789,   // Event time
-    //     "s": "BNBBTC",    // Symbol
-    //     "a": 12345,       // Aggregate trade ID
-    //     "p": "0.001",     // Price
-    //     "q": "100",       // Quantity
-    //     "f": 100,         // First trade ID
-    //     "l": 105,         // Last trade ID
-    //     "T": 123456785,   // Trade time
-    //     "m": true,        // Is the buyer the market maker?
-    //     "M": true         // Ignore
-    //   }
+    const { setTicker1, setTicker2 } = useContext(TickersContext);
+    const [ firstMessage, setFirstMessage ] = useState(false);
 
-    return <TickersContextProvider>
-                <div style={{height : "100vh", backgroundColor : "red"}}>
-                    {/* <p>{ticker}</p>
-                    <WebSocket url='wss://stream.binance.com:9443/ws/bnbbtc@ticker'
-                            onMessage={data => handleData(data)}
-                    /> */}
-                    <Grid container
-                        direction="row"
-                        justify="center"
-                        alignItems="center">
-                            <Ticker symbol="BTCUSD"/>
-                            <Ticker symbol="BTCBRL"/>
-                            <Ticker symbol="ETHUSD"/>
-                            <Ticker symbol="ETHBRL"/>
-                    </Grid>
-                </div>
-    </TickersContextProvider>
+    const handleData = (data, code) => {
+        console.log('code:');
+        console.log(code);
+        switch(code){
+            case 1:
+                setTicker1(data);
+                break;
+            case 2:
+                setTicker2(data);
+                break;
+        }
+        setFirstMessage(true);
+    }
+
+    return  <div className="viewport">
+                <WebSocket url='wss://stream.binance.com:9443/ws/btceth@ticker'
+                        onMessage={data => handleData(data, 1)}
+                />
+                <WebSocket url='wss://stream.binance.com:9443/ws/ethbtc@ticker'
+                        onMessage={data => handleData(data, 2)}
+                />
+                <Grid container
+                    direction="row"
+                    justify="center"
+                    alignItems="center">
+                        <Ticker symbol="BTCETH" firstMessage={firstMessage}/>
+                        <Ticker symbol="ETHBTC" firstMessage={firstMessage}/>
+
+                </Grid>
+            </div>
 }
