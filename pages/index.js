@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { WebSocket } from 'nextjs-websocket'
 import Grid from '@material-ui/core/Grid';
 import Ticker from '../components/Ticker';
@@ -6,24 +6,21 @@ import { TickersContext } from '../contexts/TickersContext';
 
 export default function Home(){
     const { setTicker1, setTicker2 } = useContext(TickersContext);
-    const [ firstMessage, setFirstMessage ] = useState(false);
 
     const handleData = (data, code) => {
-        console.log('code:');
-        console.log(code);
         switch(code){
             case 1:
-                setTicker1(data);
+                setTicker1(JSON.parse(data));
                 break;
             case 2:
-                setTicker2(data);
+                setTicker2(JSON.parse(data));
                 break;
         }
-        setFirstMessage(true);
     }
 
     return  <div className="viewport">
-                <WebSocket url='wss://stream.binance.com:9443/ws/btceth@ticker'
+                <h1 style={{fontFamily: 'arial', marginBottom : 10, textAlign : 'center'}}>Display Binance Cryptocurrencies</h1>
+                <WebSocket url='wss://stream.binance.com:9443/ws/dogebtc@ticker'
                         onMessage={data => handleData(data, 1)}
                 />
                 <WebSocket url='wss://stream.binance.com:9443/ws/ethbtc@ticker'
@@ -33,9 +30,8 @@ export default function Home(){
                     direction="row"
                     justify="center"
                     alignItems="center">
-                        <Ticker symbol="BTCETH" firstMessage={firstMessage}/>
-                        <Ticker symbol="ETHBTC" firstMessage={firstMessage}/>
-
+                        <Ticker symbol="DOGEBTC"/>
+                        <Ticker symbol="ETHBTC"/>
                 </Grid>
             </div>
 }
