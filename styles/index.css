@@ -1,0 +1,26 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.viewport {
+    height : 100vh;
+    display : flex;
+    flex : 1;
+    flex-direction : column;
+    justify-content : center;
+    align-items : center;
+}
+
+.ticker {
+    display : flex;
+    flex-direction : column;
+    padding : 30px;
+    border-radius : 50px;
+    background-color : black;
+    margin : 10px;
+}
+
+.p {
+    color : white;
+}
